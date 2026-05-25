@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
 <title>2026-2027 精準排班雙模行事曆</title>
 
 <style>
+/* =========================
+   基本變數
+========================= */
 :root{
     --bg-color:#fafafa;
     --card-bg:#ffffff;
@@ -21,11 +23,11 @@
     --color-freeze:#FF9797;
 }
 
-*{
-    box-sizing:border-box;
-}
+/* =========================
+   全域設定
+========================= */
+*{ box-sizing:border-box; }
 
-/* ✅ 新增：禁止橫向滑動 + 固定寬度核心 */
 html, body {
     width: 100%;
     max-width: 100%;
@@ -38,139 +40,105 @@ body{
     background:var(--bg-color);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     color:var(--text-main);
-
     display:flex;
     justify-content:center;
-
-    min-width: 420px; /* ✅ 固定視覺寬度（防止手機被撐開） */
+    min-width:420px;
 }
 
+/* =========================
+   主容器
+========================= */
 .calendar-container{
     width:100%;
-    max-width:420px; /* ✅ 固定手機友善寬度 */
-    margin:0 auto;
-
+    max-width:420px;
     background:var(--card-bg);
-
     border-radius:16px;
-
-    box-shadow:0 4px 20px rgba(0,0,0,.05);
-
     padding:16px;
-
-    transition:max-width .3s ease;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
 }
 
 .calendar-container.yearly-mode{
     max-width:1200px;
 }
 
-/* Header */
-
+/* =========================
+   Header
+========================= */
 .calendar-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     flex-wrap:wrap;
-
     gap:8px;
-
     margin-bottom:14px;
 }
 
 .current-month{
     font-size:1.2rem;
     font-weight:600;
-    letter-spacing:-0.5px;
 }
 
-/* Buttons */
-
+/* buttons */
 .action-btn,
 .quick-btn{
     background:#fff;
-
     border:1px solid #e2e8f0;
-
     border-radius:6px;
-
     padding:6px 8px;
-
     cursor:pointer;
-
     font-size:.8rem;
-
-    color:var(--text-main);
-
-    transition:.15s;
 }
 
-.action-btn:hover,
-.quick-btn:hover{
-    background:#edf2f7;
-}
-
-.quick-btn.active{
-    background:#2d3748;
+.quick-btn.active {
+    background:#4a5568;
     color:#fff;
-    border-color:#2d3748;
-    font-weight:600;
-}
-
-.quick-btn:disabled{
-    opacity:.2;
-    cursor:not-allowed;
+    border-color:#4a5568;
 }
 
 .view-toggle-btn{
     background:#2b6cb0;
     color:#fff;
-    border:none;
-    font-weight:600;
 }
 
-.view-toggle-btn:hover{
-    background:#2b5c8f;
-}
-
-/* Quick Nav */
-
+/* =========================
+   快速導航
+========================= */
 .quick-nav-panel{
     background:#f7fafc;
-
     border:1px solid #edf2f7;
-
     border-radius:12px;
-
     padding:10px;
-
     margin-bottom:14px;
 }
 
-.quick-row{
+.quick-row {
     display:flex;
+    gap:4px;
     flex-wrap:wrap;
-    gap:6px;
-
-    margin-bottom:8px;
+    margin-bottom:6px;
 }
 
-.quick-row:last-child{
-    margin-bottom:0;
-}
-
-#yearRow .quick-btn{
-    flex:1;
-}
-
-#monthRow{
+/* =========================
+   月曆基本結構
+========================= */
+.weekdays {
     display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:6px;
+    grid-template-columns:repeat(7,1fr);
+    text-align:center;
+    font-weight:600;
+    font-size:.8rem;
+    padding-bottom:6px;
+    color:var(--text-muted);
 }
 
-/* Main Render */
+.month-title {
+    font-size:1rem;
+    font-weight:600;
+    margin-top:10px;
+    margin-bottom:6px;
+    border-bottom:1px solid #edf2f7;
+    padding-bottom:4px;
+}
 
 .main-render-area{
     display:grid;
@@ -182,153 +150,55 @@ body{
     grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
 }
 
-/* Month Card */
-
-.month-title{
-    font-size:1rem;
-    font-weight:600;
-
-    margin-bottom:8px;
-
-    border-left:4px solid #2d3748;
-    padding-left:6px;
-}
-
-/* Weekdays */
-
-.weekdays{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-
-    text-align:center;
-
-    font-size:.75rem;
-    font-weight:600;
-
-    color:var(--text-muted);
-
-    margin-bottom:8px;
-}
-
-/* Days */
-
+/* =========================
+   日期格
+========================= */
 .days-grid{
     display:grid;
-    grid-template-columns:repeat(7,1fr);
-
+    grid-template-columns:repeat(7, 1fr);
     gap:2px;
 }
 
 .day-cell{
-    aspect-ratio:1;
-
-    border-radius:8px;
-
+    border-radius:4px;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
 
-    position:relative;
-
-    font-size:.95rem;
-    font-weight:500;
-
-    padding-top:10px;
+    font-size:.80rem;
+    padding:2px 0;
+    height:40px;
 }
 
-/* Today */
-
+/* today */
 .day-cell.today{
-    border:2px solid #2d3748 !important;
-    box-shadow:0 0 6px rgba(0,0,0,.1);
+border:2px solid #d4f542;
+    box-shadow:0 0 8px rgba(49,130,206,.5);
 }
+/* fade */
+.day-cell.fade{ opacity:.15; }
 
-.day-cell.today::after{
-    content:'';
-
-    position:absolute;
-
-    bottom:2px;
-
-    width:3px;
-    height:3px;
-
-    border-radius:50%;
-
-    background:#2d3748;
-}
-
-.day-cell.today.shift-晚班::after{
-    background:#fff;
-}
-
-/* Fade */
-
-.day-cell.fade{
-    opacity:.12;
-}
-
-/* Holiday */
-
+/* holiday */
 .holiday-label{
-    position:absolute;
-
-    top:1px;
-
-    width:100%;
-
-    text-align:center;
-
-    font-size:.5rem;
-
+    font-size:.6rem;
+    line-height:1;
     color:var(--color-holiday);
-
-    font-weight:bold;
-
-    white-space:nowrap;
-    overflow:hidden;
 }
 
-/* Shift */
-
+/* shift */
 .shift-label{
-    margin-top:2px;
-
-    font-size:.55rem;
-
-    font-weight:600;
+    font-size:.45rem;
+    line-height:1;
 }
 
-.shift-早班{
-    background:var(--color-early);
-    color:#4A3700;
-}
+/* shift colors */
+.shift-早班{ background:#FFE153; }
+.shift-早班三{ background:#FFAF60; }
+.shift-晚班{ background:#0066CC; color:#fff; }
+.shift-休假{ background:#e2e8f0; }
+.shift-freeze{ background:#FF9797; }
 
-.shift-早班三{
-    background:var(--color-early3);
-    color:#4A3700;
-}
-
-.shift-晚班{
-    background:var(--color-late);
-    color:#fff;
-}
-
-.shift-休假{
-    background:var(--color-leave);
-    color:#4a5568;
-}
-
-.shift-freeze{
-    background:var(--color-freeze);
-    color:#2d3748;
-}
-
-.shift-none{
-    background:transparent;
-    border:1px solid #edf2f7;
-}
 </style>
 </head>
 
@@ -336,51 +206,36 @@ body{
 
 <div class="calendar-container" id="container">
 
-    <!-- Header -->
     <div class="calendar-header">
-
         <div style="display:flex;gap:4px;align-items:center;">
             <button class="action-btn" id="prevBtn">←</button>
-
-            <div class="current-month" id="monthDisplay">
-                2026年05月
-            </div>
-
+            <div class="current-month" id="monthDisplay"></div>
             <button class="action-btn" id="nextBtn">→</button>
         </div>
 
-        <div style="display:flex;gap:4px;">
+        <div>
             <button class="action-btn" id="todayBtn">📍 今天</button>
-
-            <button class="action-btn view-toggle-btn" id="toggleViewBtn">
-                📅 全年
-            </button>
+            <button class="action-btn view-toggle-btn" id="toggleViewBtn">📅 全年</button>
         </div>
-
     </div>
 
-    <!-- Quick Nav -->
     <div class="quick-nav-panel" id="quickNavPanel">
-
         <div class="quick-row" id="yearRow">
             <button class="quick-btn" data-year="2026">2026 年</button>
             <button class="quick-btn" data-year="2027">2027 年</button>
         </div>
-
-        <div id="monthRow"></div>
-
+        <div class="quick-row" id="monthRow"></div>
     </div>
 
-    <!-- Calendar -->
     <div class="main-render-area" id="mainRenderArea"></div>
 
 </div>
 
 <script>
 
-/* ===== 以下 JS 完全不變 ===== */
-
-/* Holidays */
+/* =========================
+   假期資料
+========================= */
 const holidays = {
     "2026-06-19":"端午連假",
     "2026-06-20":"端午連假",
@@ -398,9 +253,8 @@ const holidays = {
     "2026-12-25":"行憲連假",
     "2026-12-26":"行憲連假",
     "2026-12-27":"行憲連假",
+
     "2027-01-01":"元旦",
-    "2027-01-02":"元旦連假",
-    "2027-01-03":"元旦連假",
     "2027-02-04":"小年夜",
     "2027-02-05":"除夕",
     "2027-02-06":"初一",
@@ -408,32 +262,45 @@ const holidays = {
     "2027-02-08":"初三",
     "2027-02-09":"初四",
     "2027-02-10":"初五",
+    "2027-01-02":"元旦連假",
+    "2027-01-03":"元旦連假",
+
     "2027-02-27":"和平連假",
     "2027-02-28":"和平紀念日",
     "2027-03-01":"和平連假",
+
     "2027-04-03":"清明連假",
     "2027-04-04":"兒童節",
     "2027-04-05":"清明節",
     "2027-04-06":"清明連假",
+
     "2027-04-30":"勞動連假",
     "2027-05-01":"勞動節",
     "2027-05-02":"勞動連假",
+
     "2027-06-09":"端午節",
+
     "2027-09-15":"中秋節",
     "2027-09-28":"教師節",
+
     "2027-10-09":"國慶連假",
     "2027-10-10":"國慶日",
     "2027-10-11":"國慶連假",
+
     "2027-10-23":"光復連假",
     "2027-10-24":"光復連假",
     "2027-10-25":"光復紀念日",
+
     "2027-12-24":"行憲連假",
     "2027-12-25":"行憲紀念日",
     "2027-12-26":"行憲連假",
+
     "2027-12-31":"元旦補假"
 };
 
-/* Shift Cycle */
+/* =========================
+   排班規則
+========================= */
 const shiftCycle = [
     ...Array(4).fill("晚班"),
     ...Array(2).fill("休假"),
@@ -449,72 +316,47 @@ const endRuleDate   = new Date(Date.UTC(2027,11,31));
 const freezeStart = new Date(Date.UTC(2027,1,2));
 const freezeEnd   = new Date(Date.UTC(2027,1,11));
 
-const today = new Date();
+/* =========================
+   狀態
+========================= */
+let today = new Date();
+const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
 
-const todayYear  = today.getFullYear();
-const todayMonth = today.getMonth();
-
-const todayStr =
-    todayYear + "-" +
-    String(todayMonth + 1).padStart(2,"0") + "-" +
-    String(today.getDate()).padStart(2,"0");
-
-let currentYear =
-    (todayYear === 2026 || todayYear === 2027)
-        ? todayYear
-        : 2026;
-
-let currentMonth =
-    (todayYear === 2026 || todayYear === 2027)
-        ? todayMonth
-        : 4;
-
+let currentYear = today.getFullYear();
+let currentMonth = today.getMonth();
 let isYearlyView = false;
 
-const container = document.getElementById("container");
-const monthDisplay = document.getElementById("monthDisplay");
-const mainRenderArea = document.getElementById("mainRenderArea");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const todayBtn = document.getElementById("todayBtn");
-const toggleViewBtn = document.getElementById("toggleViewBtn");
-const quickNavPanel = document.getElementById("quickNavPanel");
-const monthRow = document.getElementById("monthRow");
-
-for(let m=0;m<12;m++){
-    const btn = document.createElement("button");
-    btn.className = "quick-btn";
-    btn.dataset.month = m;
-    btn.innerText = (m+1)+"月";
-    monthRow.appendChild(btn);
-}
-
+/* =========================
+   排班核心
+========================= */
 function getShiftForDate(targetDate){
-    if(targetDate < startRuleDate || targetDate > endRuleDate) return null;
-    if(targetDate >= freezeStart && targetDate <= freezeEnd) return "freeze";
+    const utcDate = new Date(Date.UTC(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()));
 
-    let totalDays = Math.floor((targetDate.getTime() - startRuleDate.getTime()) / 86400000);
-    if(targetDate > freezeEnd) totalDays -= 10;
+    if(utcDate < startRuleDate || utcDate > endRuleDate) return null;
+
+    if(utcDate >= freezeStart && utcDate <= freezeEnd){
+        return "freeze";
+    }
+
+    let totalDays = Math.floor((utcDate - startRuleDate) / 86400000);
+
+    if(utcDate > freezeEnd) totalDays -= 10;
 
     return shiftCycle[totalDays % shiftCycle.length];
 }
 
+/* =========================
+   月曆生成
+========================= */
 function buildMonthDOM(year,month,showTitle){
     const monthCard = document.createElement("div");
 
     if(showTitle){
         const title = document.createElement("div");
         title.className = "month-title";
-        title.innerText = year + "年 " + String(month+1).padStart(2,"0") + "月";
+        title.innerText = `${year}年 ${String(month+1).padStart(2,"0")}月`;
         monthCard.appendChild(title);
     }
-
-    const weeksBar = document.createElement("div");
-    weeksBar.className = "weekdays";
-    weeksBar.innerHTML = `
-        <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
-    `;
-    monthCard.appendChild(weeksBar);
 
     const grid = document.createElement("div");
     grid.className = "days-grid";
@@ -529,47 +371,30 @@ function buildMonthDOM(year,month,showTitle){
         const cell = document.createElement("div");
         cell.className = "day-cell";
 
-        const dateKey =
-            targetDate.getFullYear()+"-"+
-            String(targetDate.getMonth()+1).padStart(2,"0")+"-"+
-            String(targetDate.getDate()).padStart(2,"0");
+        const dateKey = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2,"0")}-${String(targetDate.getDate()).padStart(2,"0")}`;
 
         if(dateKey === todayStr) cell.classList.add("today");
 
         if(targetDate.getMonth() !== month){
-            cell.classList.add("fade","shift-none");
+            cell.classList.add("fade");
             cell.innerText = targetDate.getDate();
         } else {
-            const dateText = document.createElement("div");
-            dateText.innerText = targetDate.getDate();
-            cell.appendChild(dateText);
+            cell.innerHTML = `<div>${targetDate.getDate()}</div>`;
 
             if(holidays[dateKey]){
-                const holiday = document.createElement("div");
-                holiday.className = "holiday-label";
-                holiday.innerText = holidays[dateKey];
-                cell.appendChild(holiday);
+                const h = document.createElement("div");
+                h.className = "holiday-label";
+                h.innerText = holidays[dateKey];
+                cell.appendChild(h);
             }
 
-            const compareDate = new Date(Date.UTC(
-                targetDate.getFullYear(),
-                targetDate.getMonth(),
-                targetDate.getDate()
-            ));
-
-            const shiftResult = getShiftForDate(compareDate);
-
-            if(shiftResult){
-                cell.classList.add("shift-"+shiftResult);
-
-                if(shiftResult !== "freeze"){
-                    const shift = document.createElement("div");
-                    shift.className = "shift-label";
-                    shift.innerText = shiftResult === "早班三" ? "早班" : shiftResult;
-                    cell.appendChild(shift);
-                }
-            } else {
-                cell.classList.add("shift-none");
+            const shift = getShiftForDate(targetDate);
+            if(shift){
+                cell.classList.add("shift-" + shift);
+                const s = document.createElement("div");
+                s.className = "shift-label";
+                s.innerText = shift === "freeze" ? "凍結" : shift;
+                cell.appendChild(s);
             }
         }
 
@@ -580,102 +405,123 @@ function buildMonthDOM(year,month,showTitle){
     return monthCard;
 }
 
-function updateUIState(){
-    quickNavPanel.style.display = isYearlyView ? "none" : "block";
+/* =========================
+   UI
+========================= */
+function initQuickNav(){
+    const monthRow = document.getElementById("monthRow");
+    monthRow.innerHTML = "";
+    for(let i=0;i<12;i++){
+        const btn = document.createElement("button");
+        btn.className = "quick-btn";
+        btn.innerText = (i+1)+"月";
+        btn.dataset.month = i;
+        monthRow.appendChild(btn);
+    }
+}
+
+function updateQuickNavUI(){
+    document.querySelectorAll("#yearRow .quick-btn")
+        .forEach(btn=>{
+            btn.classList.toggle("active", parseInt(btn.dataset.year) === currentYear);
+        });
+
+    document.querySelectorAll("#monthRow .quick-btn")
+        .forEach(btn=>{
+            btn.classList.toggle(
+                "active",
+                parseInt(btn.dataset.month) === currentMonth && !isYearlyView
+            );
+        });
+}
+
+/* =========================
+   render
+========================= */
+function render(){
+    const area = document.getElementById("mainRenderArea");
+    const container = document.getElementById("container");
+    const monthDisplay = document.getElementById("monthDisplay");
+
+    area.innerHTML = "";
 
     if(isYearlyView){
         container.classList.add("yearly-mode");
-        monthDisplay.innerText = currentYear + "年 全年度";
-        prevBtn.disabled = currentYear === 2026;
-        nextBtn.disabled = currentYear === 2027;
-        toggleViewBtn.innerText = "單月";
-    } else {
-        container.classList.remove("yearly-mode");
-        monthDisplay.innerText = currentYear + "年 " + String(currentMonth+1).padStart(2,"0") + "月";
+        monthDisplay.innerText = currentYear + " 年 全年";
 
-        prevBtn.disabled =
-            currentYear === 2026 && currentMonth === 4;
-
-        nextBtn.disabled =
-            currentYear === 2027 && currentMonth === 11;
-
-        toggleViewBtn.innerText = "📅 全年";
-    }
-}
-
-function render(){
-    mainRenderArea.innerHTML = "";
-
-    if(isYearlyView){
-        let startM = currentYear === 2026 ? 4 : 0;
-        for(let m=startM;m<12;m++){
-            mainRenderArea.appendChild(buildMonthDOM(currentYear,m,true));
+        for(let m=0;m<12;m++){
+            area.appendChild(buildMonthDOM(currentYear,m,true));
         }
     } else {
-        mainRenderArea.appendChild(buildMonthDOM(currentYear,currentMonth,false));
+        container.classList.remove("yearly-mode");
+        monthDisplay.innerText = `${currentYear}年 ${String(currentMonth+1).padStart(2,"0")}月`;
+        area.appendChild(buildMonthDOM(currentYear,currentMonth,false));
     }
 
-    updateUIState();
+    updateQuickNavUI();
 }
 
-toggleViewBtn.addEventListener("click",()=>{
-    isYearlyView = !isYearlyView;
-    render();
-});
-
-prevBtn.addEventListener("click",()=>{
+/* =========================
+   事件
+========================= */
+document.getElementById("prevBtn").onclick = () => {
     if(isYearlyView) currentYear--;
     else {
         currentMonth--;
-        if(currentMonth < 0){ currentMonth = 11; currentYear--; }
+        if(currentMonth < 0){
+            currentMonth = 11;
+            currentYear--;
+        }
     }
     render();
-});
+};
 
-nextBtn.addEventListener("click",()=>{
+document.getElementById("nextBtn").onclick = () => {
     if(isYearlyView) currentYear++;
     else {
         currentMonth++;
-        if(currentMonth > 11){ currentMonth = 0; currentYear++; }
+        if(currentMonth > 11){
+            currentMonth = 0;
+            currentYear++;
+        }
     }
     render();
-});
+};
 
-todayBtn.addEventListener("click",()=>{
-    currentYear =
-        (todayYear === 2026 || todayYear === 2027) ? todayYear : 2026;
-
-    currentMonth =
-        (todayYear === 2026 || todayYear === 2027) ? todayMonth : 4;
-
-    isYearlyView = false;
+document.getElementById("todayBtn").onclick = () => {
+    currentYear = today.getFullYear();
+    currentMonth = today.getMonth();
     render();
-});
+};
 
-document.querySelectorAll("#yearRow .quick-btn").forEach(btn=>{
-    btn.addEventListener("click",(e)=>{
-        let y = parseInt(e.target.dataset.year);
-        if(y === 2026 && currentMonth < 4) currentMonth = 4;
-        renderCalendar(y,currentMonth);
-    });
-});
-
-document.querySelectorAll("#monthRow .quick-btn").forEach(btn=>{
-    btn.addEventListener("click",(e)=>{
-        renderCalendar(currentYear,parseInt(e.target.dataset.month));
-    });
-});
-
-function renderCalendar(y,m){
-    currentYear = y;
-    currentMonth = m;
-    isYearlyView = false;
+document.getElementById("toggleViewBtn").onclick = (e) => {
+    isYearlyView = !isYearlyView;
+    e.target.innerText = isYearlyView ? "📅 單月" : "📅 全年";
     render();
-}
+};
 
+document.getElementById("yearRow").onclick = (e) => {
+    if(e.target.classList.contains("quick-btn")){
+        currentYear = parseInt(e.target.dataset.year);
+        render();
+    }
+};
+
+document.getElementById("monthRow").onclick = (e) => {
+    if(e.target.classList.contains("quick-btn")){
+        currentMonth = parseInt(e.target.dataset.month);
+        isYearlyView = false;
+        document.getElementById("toggleViewBtn").innerText = "📅 全年";
+        render();
+    }
+};
+
+/* =========================
+   init
+========================= */
+initQuickNav();
 render();
 
 </script>
-
 </body>
 </html>
